@@ -2,7 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",  
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -27,6 +27,10 @@
     "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.8",
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.8",
+    "@babel/preset-react": "^7.26.3",
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
