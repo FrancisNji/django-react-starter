@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/iHARP-ec2-instance
+    destination: /home/ec2-user/django-react-starter
 hooks:
   ApplicationStop:
     - location: scripts/application_stop.sh
@@ -14,5 +14,9 @@ hooks:
       runas: ec2-user
   ApplicationStart:
     - location: scripts/application_start.sh
+      timeout: 300
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/init_venv.sh
       timeout: 300
       runas: ec2-user

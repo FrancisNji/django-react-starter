@@ -1,15 +1,16 @@
 #!/bin/bash
+set -e
+echo "---- [BeforeInstall] Installing NVM, Node.js ----"
 
-#download node and npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
+export NVM_DIR="$HOME/.nvm"
+. "$NVM_DIR/nvm.sh"
 nvm install node
 
-#create our working directory if it doesnt exist
-DIR="/home/ec2-user/iHARP-ec2-instance"
-if [ -d "$DIR" ]; then
-  echo "${DIR} exists"
+APP_DIR="/home/ec2-user/django-react-starter"
+if [ -d "$APP_DIR" ]; then
+  echo "$APP_DIR already exists"
 else
-  echo "Creating ${DIR} directory"
-  mkdir ${DIR}
+  echo "Creating $APP_DIR"
+  mkdir -p $APP_DIR
 fi
