@@ -2,11 +2,18 @@
 set -e
 echo "---- [BeforeInstall] Installing NVM, Node.js ----"
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-. "$NVM_DIR/nvm.sh"
-nvm install node
+# Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
+# Load NVM immediately
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Install a stable version compatible with Amazon Linux 2
+nvm install 18
+nvm use 18
+
+# Create deployment directory 
 APP_DIR="/home/ec2-user/django-react-starter"
 if [ -d "$APP_DIR" ]; then
   echo "$APP_DIR already exists"
