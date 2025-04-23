@@ -2,6 +2,11 @@
 
 echo "==== [Install] Creating Python venv ===="
 
+echo "==== [Install] Installing system-level HDF5 dependencies ===="
+
+# Amazon Linux
+sudo yum install -y hdf5 hdf5-devel
+
 cd /home/ec2-user/django-react-starter/backend || {
   echo "❌ Could not cd into backend"; exit 1;
 }
