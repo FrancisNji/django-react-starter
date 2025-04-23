@@ -1,26 +1,39 @@
 #!/bin/bash
 
-echo "==== [AfterInstall] Running setup for Django and React ===="
+echo "==== [AfterInstall] Django migrations & React build ===="
 
-# Fix permissions to avoid permission denied errors
-sudo chmod -R 777 /home/ec2-user/django-react-starter
+# Navigate to project root
+cd /home/ec2-user/django-react-starter || exit 1
 
-# Activate Python venv and install Python dependencies
-cd /home/ec2-user/django-react-starter
-bash init_venv.sh
+# Create virtualenv if it doesn't exist
+if [ ! -d "venv" ]; then
+  echo "Creating Python virtual environment..."
+  python3 -m venv venv || { echo "Failed to create virtualenv"; exit 1; }
+fi
 
-# Run Django migrations
-cd /home/ec2-user/django-react-starter/backend
-source venv/bin/activate
-python manage.py makemigrations
-python manage.py migrate
+# Activate virtualenv
+source venv/bin/activate || { echo "Failed to activate virtualenv"; exit 1; }
 
-# Install frontend dependencies
-cd /home/ec2-user/django-react-starter/frontend
-npm install --legacy-peer-deps
-npm run dev
+# Upgrade pip & install requirements
+pip install --upgrade pip
+pip install -r backend/requirements.txt || { echo "Failed to install backend dependencies"; exit 1; }
 
-# Build the frontend
-npm run build
+# Apply migrations
+cd backend || exit 1
+python3 manage.py makemigrations || exit 1
+python3 manage.py migrate || exit 1
 
-echo "✅ AfterInstall completed."
+# Frontend setup
+cd ../frontend || exit 1
+
+# Install Node.js if npm is missing (optional)
+if ! command -v npm &> /dev/null; then
+  echo "Installing Node.js and npm..."
+  curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+  sudo yum install -y nodejs
+fi
+
+npm install --legacy-peer-deps || { echo "npm install failed"; exit 1; }
+npm run build || { echo "npm build failed"; exit 1; }
+
+echo "==== AfterInstall completed successfully ===="
