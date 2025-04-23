@@ -1,33 +1,25 @@
 #!/bin/bash
 
-set -e
+echo "==== [AfterInstall] Running Django backend setup ===="
 
-# Permissions
-sudo chmod -R 777 /home/ec2-user/django-react-starter
+cd /home/ec2-user/django-react-starter/backend
 
-# Navigate to project
-cd /home/ec2-user/django-react-starter
+# Activate virtual environment
+source venv/bin/activate
 
-# Update system and install packages
-sudo yum update -y
-sudo yum install -y gcc gcc-c++ make \
-  python3-devel \
-  libjpeg-devel \
-  zlib-devel \
-  git
-
-# OPTIONAL: Manually install HDF5 if needed
-# Skipping hdf5-devel since not available on Amazon Linux 2
-
-# Create and activate virtualenv
-bash init_venv.sh
-
-# Backend setup
-cd backend
-source ../venv/bin/activate
-python manage.py makemigrations
+# Run database migrations
 python manage.py migrate
 
-# Frontend setup
-cd ../frontend
-npm install --legacy-peer-deps
+# Collect static files
+python manage.py collectstatic --noinput
+
+echo "==== [AfterInstall] Building React frontend ===="
+
+cd /home/ec2-user/django-react-starter/frontend
+
+# Ensure Node.js is installed and available
+npm install
+npm run build
+
+echo "==== [AfterInstall] Deployment steps completed successfully ===="
+
