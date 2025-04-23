@@ -1,58 +1,30 @@
 #!/bin/bash
 
-echo "==== [ApplicationStart] Starting Django + React App ===="
+echo "==== [ApplicationStart] Starting Django and React dev servers ===="
 
-# Give permission for everything in the deployment directory
-sudo chmod -R 755 /home/ec2-user/django-react-starter
+# Add npm and node to path (if using nvm)
+export NVM_DIR="$HOME/.nvm"	
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"	
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Load NVM so npm/node commands work
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+# Start Django backend in tmux session
+cd /home/ec2-user/django-react-starter/backend
+source venv/bin/activate
 
-# === BACKEND SETUP ===
-cd /home/ec2-user/django-react-starter/backend || exit 1
+# Kill existing Django server if running
+pkill -f "manage.py runserver"
 
-# Activate virtual environment
-if [ -f "venv/bin/activate" ]; then
-  echo "✅ Activating virtual environment"
-  source venv/bin/activate
-else
-  echo "❌ Virtual environment not found in backend/"
-  exit 1
-fi
+# Start Django server in tmux
+tmux kill-session -t django 2>/dev/null
+tmux new -d -s django "python manage.py runserver 0.0.0.0:8000"
 
-# Run Django migrations
-echo "⚙️ Running Django migrations"
-python3 manage.py makemigrations
-python3 manage.py migrate
+# Optionally start React frontend dev server in another tmux session
+cd /home/ec2-user/django-react-starter/frontend
 
-# Run backend server in background (tmux OR nohup)
-echo "🚀 Starting Django server"
-nohup python3 manage.py runserver 0.0.0.0:8000 > ../django.out.log 2> ../django.err.log < /dev/null &
+# Kill any existing dev server
+pkill -f "npm run dev"
 
-# === FRONTEND SETUP ===
-cd /home/ec2-user/django-react-starter/frontend || exit 1
+tmux kill-session -t react 2>/dev/null
+tmux new -d -s react "npm run dev"
 
-# Install frontend dependencies
-echo "📦 Installing frontend dependencies"
-npm install --legacy-peer-deps || {
-  echo "❌ npm install failed"; exit 1;
-}
-
-# Build frontend app
-echo "🛠️ Building React frontend"
-npm run build || {
-  echo "❌ React build failed"; exit 1;
-}
-
-# # Copy build output to Django static directory
-# echo "📁 Copying frontend/dist to backend/frontend/dist"
-# rm -rf /home/ec2-user/django-react-starter/backend/frontend/dist
-# cp -r dist /home/ec2-user/django-react-starter/backend/frontend/
-
-# Optionally run frontend dev server (comment out in production)
-echo "🚀 Starting React dev server"
-nohup npm run dev > ../react.out.log 2> ../react.err.log < /dev/null &
-
-echo "✅ ApplicationStart complete"
+echo "✅ Django and React dev servers started."
