@@ -28,31 +28,41 @@
 
 #!/bin/bash
 
-echo "==== Initializing Virtual Environment and Installing Dependencies ===="
+set -e  # Exit immediately if a command exits with a non-zero status
+
+echo "==== [AfterInstall] Django migrations & React build ===="
 
 cd /home/ec2-user/django-react-starter || exit 1
 
-# Ensure Python 3 is available
-if ! command -v python3 &> /dev/null; then
-  echo "Installing Python3..."
-  sudo yum install -y python3
+# SYSTEM DEPENDENCIES FIRST
+echo "==== Installing system-level dependencies for Python builds ===="
+sudo yum -y update
+sudo yum -y groupinstall "Development Tools"
+sudo yum -y install gcc gcc-c++ python3-devel hdf5 hdf5-devel
+
+# ACTIVATE VENV
+echo "==== Activating virtualenv ===="
+source venv/bin/activate || { echo "Failed to activate venv"; exit 1; }
+
+# BACKEND SETUP
+echo "==== Installing backend Python dependencies ===="
+cd backend || exit 1
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt || { echo "Failed to install Python requirements"; exit 1; }
+
+# FRONTEND SETUP
+echo "==== Installing frontend dependencies and building React ===="
+cd ../frontend || exit 1
+
+if ! command -v npm &> /dev/null; then
+  echo "npm not found, installing Node.js..."
+  curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+  sudo yum install -y nodejs
 fi
 
-# Create and activate virtual environment
-if [ ! -d "venv" ]; then
-  python3 -m venv venv || { echo "Virtualenv creation failed"; exit 1; }
-fi
+npm install --legacy-peer-deps || { echo "npm install failed"; exit 1; }
+npm run build || { echo "npm run build failed"; exit 1; }
 
-source venv/bin/activate || { echo "Failed to activate virtualenv"; exit 1; }
+echo "==== [AfterInstall] Script completed successfully ===="
 
-# Install system dependencies (HDF5 and compiler)
-echo "Installing system packages for Python libraries..."
-sudo yum -y install gcc gcc-c++ kernel-devel
-sudo yum -y install hdf5 hdf5-devel
-
-# Upgrade pip & install dependencies
-pip install --upgrade pip
-pip install -r backend/requirements.txt || { echo "Failed to install Python dependencies"; exit 1; }
-
-echo "==== Virtual Environment Setup Complete ===="
 
