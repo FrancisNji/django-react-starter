@@ -1,13 +1,9 @@
 #!/bin/bash
 
-APP_DIR="/home/ec2-user/django-react-starter"
+echo "==== [BeforeInstall] Cleaning old deploy and fixing permissions ===="
 
-echo "==== [BeforeInstall] Cleaning up $APP_DIR ===="
+rm -rf /home/ec2-user/django-react-starter
 
-if [ -d "$APP_DIR" ]; then
-    echo "[BeforeInstall] Removing existing directory $APP_DIR..."
-    sudo rm -rf "$APP_DIR"
-    echo "[BeforeInstall] $APP_DIR removed successfully."
-else
-    echo "[BeforeInstall] No existing directory. Proceeding."
-fi
+# Ensure correct permissions
+mkdir -p /home/ec2-user/django-react-starter
+sudo chown -R ec2-user:ec2-user /home/ec2-user/django-react-starter
