@@ -9,13 +9,18 @@ cd "$BACKEND_DIR"
 echo "Working dir: $(pwd)"
 ls -la
 
-# Activate virtual environment
-if [ -f "venv/bin/activate" ]; then
-  source venv/bin/activate
-else
-  echo "ERROR: venv/bin/activate not found. Exiting."
-  exit 1
+# Check and create virtualenv
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
 fi
+
+# Activate it
+source venv/bin/activate
+
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
 
 python manage.py makemigrations
 python manage.py migrate
