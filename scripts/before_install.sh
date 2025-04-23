@@ -2,7 +2,16 @@
 
 echo "==== [BeforeInstall] Cleaning old deployment ===="
 
-rm -rf /home/ec2-user/django-react-starter
+APP_DIR="/home/ec2-user/django-react-starter"
+
+echo "==== [BeforeInstall] Cleaning up $APP_DIR ===="
+
+if [ -d "$APP_DIR" ]; then
+    rm -rf "$APP_DIR"
+    echo "[BeforeInstall] Removed existing $APP_DIR"
+else
+    echo "[BeforeInstall] $APP_DIR does not exist. Skipping removal."
+fi
 
 set -e
 
