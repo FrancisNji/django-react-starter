@@ -46,10 +46,10 @@ npm run build || {
   echo "❌ React build failed"; exit 1;
 }
 
-# Copy build output to Django static directory
-echo "📁 Copying frontend/dist to backend/frontend/dist"
-rm -rf /home/ec2-user/django-react-starter/backend/frontend/dist
-cp -r dist /home/ec2-user/django-react-starter/backend/frontend/
+# # Copy build output to Django static directory
+# echo "📁 Copying frontend/dist to backend/frontend/dist"
+# rm -rf /home/ec2-user/django-react-starter/backend/frontend/dist
+# cp -r dist /home/ec2-user/django-react-starter/backend/frontend/
 
 # Optionally run frontend dev server (comment out in production)
 echo "🚀 Starting React dev server"
