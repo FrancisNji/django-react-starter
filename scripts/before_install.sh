@@ -1,6 +1,13 @@
 #!/bin/bash
+
+echo "==== [BeforeInstall] Cleaning old deployment ===="
+
+rm -rf /home/ec2-user/django-react-starter
+
 set -e
+
 echo "---- [BeforeInstall] Installing NVM, Node.js ----"
+
 
 # Install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash

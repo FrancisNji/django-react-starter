@@ -1,33 +1,25 @@
 #!/bin/bash
-set -e
-echo "---- [AfterInstall] Running migrations and building frontend ----"
 
-BACKEND_DIR="/home/ec2-user/django-react-starter/backend"
-cd "$BACKEND_DIR"
+echo "==== [AfterInstall] Running Django backend setup ===="
 
-# Log current working directory and files
-echo "Working dir: $(pwd)"
-ls -la
+cd /home/ec2-user/django-react-starter/backend
 
-# Check and create virtualenv
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
-fi
-
-# Activate it
+# Activate virtual environment
 source venv/bin/activate
 
-# Install dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
-
-python manage.py makemigrations
+# Run database migrations
 python manage.py migrate
 
-cd ../frontend
+# Collect static files
+python manage.py collectstatic --noinput
+
+echo "==== [AfterInstall] Building React frontend ===="
+
+cd /home/ec2-user/django-react-starter/frontend
+
+# Ensure Node.js is installed and available
+npm install
 npm run build
 
-echo "Copying frontend build to Django static directory"
-cp -r dist ../backend/frontend/dist
+echo "==== [AfterInstall] Deployment steps completed successfully ===="
 
