@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#give permission for everything in the iHARP-ec2-instance directory
-sudo chmod -R 777 /home/ec2-user/iHARP-ec2-instance
+#give permission for everything in the django-react-starter directory
+sudo chmod -R 777 /home/ec2-user/django-react-starter
 
 #navigate into our working directory where we have all our github files
-cd /home/ec2-user/iHARP-ec2-instance
+cd /home/ec2-user/django-react-starter
 
 #add npm and node to path
 export NVM_DIR="$HOME/.nvm"	

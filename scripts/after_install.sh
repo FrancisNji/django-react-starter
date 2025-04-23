@@ -1,25 +1,19 @@
 #!/bin/bash
 
-echo "==== [AfterInstall] Running Django backend setup ===="
+echo "==== [AfterInstall] Django migrations & React build ===="
 
 cd /home/ec2-user/django-react-starter/backend
-
-# Activate virtual environment
 source venv/bin/activate
 
-# Run database migrations
+python manage.py makemigrations
 python manage.py migrate
 
-# Collect static files
-python manage.py collectstatic --noinput
-
-echo "==== [AfterInstall] Building React frontend ===="
-
+echo "==== Installing frontend dependencies ===="
 cd /home/ec2-user/django-react-starter/frontend
-
-# Ensure Node.js is installed and available
-npm install
+npm install --legacy-peer-deps
 npm run build
 
-echo "==== [AfterInstall] Deployment steps completed successfully ===="
-
+# Move built frontend to Django static
+echo "==== Moving React dist to Django ===="
+rm -rf /home/ec2-user/django-react-starter/backend/frontend/dist
+cp -r /home/ec2-user/django-react-starter/frontend/dist /home/ec2-user/django-react-starter/backend/frontend/dist
