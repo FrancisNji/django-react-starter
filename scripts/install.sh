@@ -1,25 +1,25 @@
 #!/bin/bash
 
-echo "==== [Install] Setting up Python environment ===="
+echo "==== [Install] Creating Python venv ===="
 
 cd /home/ec2-user/django-react-starter/backend || {
-  echo "❌ Failed to cd into backend"; exit 1;
+  echo "❌ Could not cd into backend"; exit 1;
 }
 
-# Create virtualenv if it doesn't exist
+# Ensure permissions are correct
+sudo chown -R ec2-user:ec2-user .
+
+# Create virtualenv if not exists
 if [ ! -d "venv" ]; then
   python3 -m venv venv || {
-    echo "❌ Failed to create virtual environment"; exit 1;
+    echo "❌ Failed to create virtualenv"; exit 1;
   }
 fi
 
-# Activate venv
 source venv/bin/activate
-
-# Install requirements
 pip install --upgrade pip
 pip install -r requirements.txt || {
-  echo "❌ Failed to install requirements"; exit 1;
+  echo "❌ Failed to install Python dependencies"; exit 1;
 }
 
-echo "✅ venv created and requirements installed"
+echo "✅ venv and dependencies ready"
