@@ -26,26 +26,33 @@
 
 #!/bin/bash
 
-echo "==== Initializing Virtual Environment ===="
+#!/bin/bash
+
+echo "==== Initializing Virtual Environment and Installing Dependencies ===="
 
 cd /home/ec2-user/django-react-starter || exit 1
 
 # Ensure Python 3 is available
 if ! command -v python3 &> /dev/null; then
-  echo "Python3 not found. Installing..."
+  echo "Installing Python3..."
   sudo yum install -y python3
 fi
 
-# Create virtual environment if not already present
+# Create and activate virtual environment
 if [ ! -d "venv" ]; then
   python3 -m venv venv || { echo "Virtualenv creation failed"; exit 1; }
 fi
 
-# Activate the virtual environment
-source venv/bin/activate || { echo "Virtualenv activation failed"; exit 1; }
+source venv/bin/activate || { echo "Failed to activate virtualenv"; exit 1; }
 
-# Upgrade pip and install dependencies
+# Install system dependencies (HDF5 and compiler)
+echo "Installing system packages for Python libraries..."
+sudo yum -y install gcc gcc-c++ kernel-devel
+sudo yum -y install hdf5 hdf5-devel
+
+# Upgrade pip & install dependencies
 pip install --upgrade pip
 pip install -r backend/requirements.txt || { echo "Failed to install Python dependencies"; exit 1; }
 
 echo "==== Virtual Environment Setup Complete ===="
+
