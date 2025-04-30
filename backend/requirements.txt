@@ -4,7 +4,8 @@ django-cors-headers
 xarray
 numpy
 pandas
-netcdf4
+# netcdf4
+h5netcdf
 dask[complete]
 plotly
 python-dotenv

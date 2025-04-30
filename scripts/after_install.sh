@@ -29,7 +29,7 @@ npm run build
 
 cd /home/ec2-user/django-react-starter/backend
 
-python manage.py runserver
+python3 manage.py runserver
 
 cd /home/ec2-user/django-react-starter/frontend
 
