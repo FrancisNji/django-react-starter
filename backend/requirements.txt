@@ -1,43 +1,43 @@
-# django
-# djangorestframework
-# django-cors-headers
-# xarray
-# numpy
-# pandas
-# # netcdf4
-# h5netcdf
-# dask[complete]
-# plotly
-# python-dotenv
-# geopandas
-# cdsapi
+django
+djangorestframework
+django-cors-headers
+xarray
+numpy
+pandas
+# netcdf4
+h5netcdf
+dask[complete]
+plotly
+python-dotenv
+geopandas
+cdsapi
 
 
-# Web framework and API
-django==3.2.25
-djangorestframework==3.15.1
-django-cors-headers==4.1.0
+# # Web framework and API
+# django==3.2.25
+# djangorestframework==3.15.1
+# django-cors-headers==4.1.0
 
-# Data science and IO
-xarray==0.20.2
-h5netcdf==1.2.0        # NetCDF support via h5netcdf engine
-numpy==1.21.6
-pandas==1.3.5
-dask[complete]==2022.5.2
-plotly==5.19.0
+# # Data science and IO
+# xarray==0.20.2
+# h5netcdf      # NetCDF support via h5netcdf engine
+# numpy==1.21.6
+# pandas==1.3.5
+# dask[complete]==2022.5.2
+# plotly==5.19.0
 
-# Climate + geospatial
-geopandas==0.10.2
-cdsapi==0.5.1
+# # Climate + geospatial
+# geopandas==0.10.2
+# cdsapi==0.5.1
 
-# Environment config
-python-dotenv==1.0.1
+# # Environment config
+# python-dotenv==1.0.1
 
-# Optional (for deployment)
-gunicorn==20.1.0
-whitenoise==6.6.0
-psycopg2-binary==2.9.9  # Only if using PostgreSQL
+# # Optional (for deployment)
+# gunicorn==20.1.0
+# whitenoise==6.6.0
+# psycopg2-binary==2.9.9  # Only if using PostgreSQL
 
-# Compatibility tools
-setuptools>=42
-wheel
+# # Compatibility tools
+# setuptools>=42
+# wheel
