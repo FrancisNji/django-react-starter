@@ -3,6 +3,7 @@ djangorestframework
 django-cors-headers
 xarray
 numpy
+gunicorn
 pandas
 # netcdf4
 h5netcdf
